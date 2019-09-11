@@ -19,9 +19,23 @@ class Season(object):
         return f'{self.season_year}-{self.season_year % 100 + 1}'
 
 class SeasonType():
-    """The string representation of each stage of a NBA season used by the NBA stats api."""
+    """The string representation for each stage of a NBA season used by the NBA stats api."""
     
     PRE_SEASON = 'Pre Season'
     REGULAR_SEASON = 'Regular Season'
     PLAYOFFS = 'Playoffs'
     ALL_STAR = 'All Star'
+
+class LeaderboardSortCategory():
+    """The string representation for each category that leaders could be sorted by"""
+
+    MINUTES_PLAYED = 'MIN'
+    OFFENSIVE_REBOUNDS = 'OREB'
+    DEFENSIVE_REBOUNDS = 'DREB'
+    REBOUNDS = 'REB'
+    ASSISTS = 'AST'
+    STEALS = 'STL'
+    BLOCKS = 'BLK'
+    TURNOVERS = 'TOV'
+    EFFICIENCY = 'EFF'
+    POINTS = 'PTS'
