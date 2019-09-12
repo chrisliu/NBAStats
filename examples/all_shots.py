@@ -12,7 +12,7 @@ def main():
 
     shots = list()
     for i, player_id in enumerate(player_ids):
-        print(f"{ordinal(i + 1)} player: {leaderboard[i]['PLAYER']}")
+        print(f"{ordinal(i + 1)} player: {leaderboard[i]['PLAYER_NAME']}")
         shots += get_shot_log(player_id, season, season_type)
 
         # Save progress

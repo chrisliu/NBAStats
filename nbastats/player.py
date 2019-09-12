@@ -3,7 +3,7 @@ import requests
 from nbastats.options import LeaderboardSortCategory
 
 PLAYER_SHOT_LOG_URL = 'https://stats.nba.com/stats/shotchartdetail'
-LEADERBOARDS_URL = 'https://stats.nba.com/stats/leagueLeaders'
+LEADERBOARDS_URL = 'https://stats.nba.com/stats/leaguedashplayerstats'
 
 def get_shot_log(player_id, season, season_type, **kwargs):
     """Gets the shot log for a player from NBA stats.
@@ -95,7 +95,7 @@ def get_shot_log(player_id, season, season_type, **kwargs):
     shots = [shot for shot in shots if shot['GRID_TYPE'] == 'Shot Chart Detail']
     return shots
 
-def get_leaders(season, season_type, sort_category = LeaderboardSortCategory.POINTS):
+def get_leaders(season, season_type):
     """Gets the leaders of a season in descending sorted order.
 
     The NBA stats api returns a dictionary in the following format:
@@ -133,28 +133,60 @@ def get_leaders(season, season_type, sort_category = LeaderboardSortCategory.POI
         Each player is represented by a dictionary where the keys are "headers"
         and the values are the corresponding statistics of each player list.
     """
-    params = {
-        'Season': str(season),
-        'SeasonType': season_type,
-        'StatCategory': sort_category,
-        'PerMode': 'PerGame', # Hardcoded (options: 'PerGame', 'Per48')
-        'Scope': 'S', # Hardcoded (options: 'RS', 'S', 'Rookies')
-        'LeagueID': '00'
+
+    params = { 
+        "Season": str(season),
+        "SeasonType": season_type,
+        "College": "",
+        "Conference": "",
+        "Country": "",
+        "DateFrom": "",
+        "DateTo": "",
+        "Division": "",
+        "DraftPick": "",
+        "DraftYear": "",
+        "GameScope": "",
+        "GameSegment": "",
+        "Height": "",
+        "LastNGames": "0",
+        "LeagueID": "00",
+        "Location": "",
+        "MeasureType": "Base",
+        "Month": "0",
+        "OpponentTeamID": "0",
+        "Outcome": "",
+        "PORound": "0",
+        "PaceAdjust": "N",
+        "PerMode": "PerGame",
+        "Period": "0",
+        "PlayerExperience": "",
+        "PlayerPosition": "",
+        "PlusMinus": "N",
+        "Rank": "N",
+        "SeasonSegment": "",
+        "ShotClockRange": "",
+        "StarterBench": "",
+        "TeamID": "0",
+        "TwoWay": "0",
+        "VsConference": "",
+        "VsDivision": "",
+        "Weight": ""
     }
 
     response_str = _get_response(LEADERBOARDS_URL, params)
 
     # If the parameters given aren't valid
     try:
-        leaderboards = json.loads(response_str)
+        leaderboard_results = json.loads(response_str)
     except:
         raise ValueError(f"API error - {response_str}")
 
-    if 'Message' in leaderboards:
-        raise ValueError(f"API error - {leaderboards['Message']}")
-
-    header = leaderboards['resultSet']['headers']
-    return [dict(zip(header, player)) for player in leaderboards['resultSet']['rowSet']]
+    leaderboards = list()
+    for result in leaderboard_results['resultSets']: 
+        header = result['headers']
+        leaderboards += [dict(zip(header, player)) 
+            for player in result['rowSet']]
+    return leaderboards
 
 def _get_response(url, params):
     """Makes a request and returns the string response
