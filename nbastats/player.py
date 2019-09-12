@@ -1,5 +1,5 @@
 import json
-import requests
+from nbastats.http import get_response
 from nbastats.options import LeaderboardSortCategory
 
 PLAYER_SHOT_LOG_URL = 'https://stats.nba.com/stats/shotchartdetail'
@@ -78,7 +78,7 @@ def get_shot_log(player_id, season, season_type, **kwargs):
         else:
             raise ValueError(f"{key} is not a valid argument")
 
-    response_str = _get_response(PLAYER_SHOT_LOG_URL, params)
+    response_str = get_response(PLAYER_SHOT_LOG_URL, params)
 
     # If the parameters given aren't valid
     try:
@@ -173,7 +173,7 @@ def get_leaders(season, season_type):
         "Weight": ""
     }
 
-    response_str = _get_response(LEADERBOARDS_URL, params)
+    response_str = get_response(LEADERBOARDS_URL, params)
 
     # If the parameters given aren't valid
     try:
@@ -187,25 +187,3 @@ def get_leaders(season, season_type):
         leaderboards += [dict(zip(header, player)) 
             for player in result['rowSet']]
     return leaderboards
-
-def _get_response(url, params):
-    """Makes a request and returns the string response
-
-    Arguments:
-        url: A string for the base url.
-        params: A dictionary for any queries.
-
-    Returns:
-        A string of the response decoded based on the encoding format in the 
-        returned header.
-    """
-
-    response = requests.get(
-        url = url,
-        params = params,
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'
-        }
-    )
-
-    return response.content.decode(response.encoding)
