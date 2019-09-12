@@ -12,7 +12,7 @@ def main():
 
     shots = list()
     for i, player_id in enumerate(player_ids):
-        print(f"{i + 1}th player: {leaderboard[i]['PLAYER']}")
+        print(f"{ordinal(i + 1)} player: {leaderboard[i]['PLAYER']}")
         shots += get_shot_log(player_id, season, season_type)
 
         # Save progress
@@ -23,6 +23,10 @@ def main():
     column_data = [[shot.get(key, '') for key in column_names] for shot in shots]
     shots_df = pd.DataFrame(data = shots, columns = column_names)
     shots_df.to_csv('output/shots 2018-19.csv')
+
+def ordinal(num):
+    num_ord = {1: 'st', 2: 'nd', 3: 'rd'}.get(num if num < 20 else num % 10, 'th')
+    return f'{num}{num_ord}'
 
 if __name__ == '__main__':
     main()

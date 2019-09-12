@@ -90,6 +90,9 @@ def get_shot_log(player_id, season, season_type, **kwargs):
     for result in player_shots['resultSets']:
         header = result['headers']
         shots += [dict(zip(header, shot)) for shot in result['rowSet']]
+
+    # Only keep shot data, not league averages
+    shots = [shot for shot in shots if shot['GRID_TYPE'] == 'Shot Chart Detail']
     return shots
 
 def get_leaders(season, season_type, sort_category = LeaderboardSortCategory.POINTS):
