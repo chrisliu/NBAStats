@@ -53,7 +53,7 @@ def get_game_info(game_id):
     if home_line['PTS'] > visiting_line['PTS']:
         winner = clean_team_info(home_line) 
     else:
-        winner = clean_team_info(away_line)
+        winner = clean_team_info(visiting_line)
 
     return {
         'summary': summary,
