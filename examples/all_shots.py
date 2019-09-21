@@ -16,13 +16,13 @@ def main():
         shots += get_shot_log(player_id, season, season_type)
 
         # Save progress
-        with open('output/temp.json', 'w') as out:
+        with open('scraped_data/temp.json', 'w') as out:
             json.dump(shots, out, indent = 4)
 
     column_names = list(shots[0].keys())
     column_data = [[shot.get(key, '') for key in column_names] for shot in shots]
     shots_df = pd.DataFrame(data = shots, columns = column_names)
-    shots_df.to_csv('output/shots 2018-19.csv')
+    shots_df.to_csv('scraped_data/shots 2018-19.csv')
 
 def ordinal(num):
     num_ord = {1: 'st', 2: 'nd', 3: 'rd'}.get(num if num < 20 else num % 10, 'th')

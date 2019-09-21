@@ -7,8 +7,8 @@ def main():
     # Preloaded GSW data
     print("Prepping data...")
     team_id = 1610612744 # GSW
-    shots = TeamPreprocessor('shot_data/shots 2018-19.csv', team_id, 
-        data_preprocessor, identity, 'shot_data/gsw_outcomes.json')
+    shots = TeamPreprocessor('scraped_data/shots 2018-19.csv', team_id, 
+        data_preprocessor, identity, 'scraped_data/gsw_outcomes.json')
 
     # Cross Validation
     print("Model Results:")
